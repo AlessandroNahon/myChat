@@ -56,7 +56,22 @@ export default class ChatContainer extends Component {
     
     //UPDATES THE TYPING OF CHAT WITH ID PASSED IN
     updateTypingInChat = (chatId) => {
-      
+      return ({isTyping, user}) => {
+        if(user !== this.props.user.name) {
+          const { chats } = this.state
+          let newChats = chats.map((chat) => {
+            if(chat.id == chatId) {
+              if(isTyping && !chat.typingUsers.includes(user)) {
+                chat.typingUsers.push(user)
+              } else if(!isTyping && chat.typingUsers.includes(user)) {
+                chat.typingUsers = chat.typingUsers.filter(u => u !== user)
+              }
+              return chat
+            }
+          })
+          this.setState({chats:newChats})
+        }
+      }
     }
     
     //ADDS MESSAGE TO SPECIFIC CHAT
